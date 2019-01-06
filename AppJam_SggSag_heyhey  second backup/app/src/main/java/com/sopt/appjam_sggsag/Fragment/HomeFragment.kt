@@ -40,10 +40,9 @@ class HomeFragment : Fragment(), CardStackListener {
     private var homeFragmentView: View? = null
 
     //For Server Communication
-    val WRITE_FRAGMENT_REQUESET_CODE = 1000
-    val dataList: ArrayList<DetailPosterData> by lazy {
-        ArrayList<DetailPosterData>()
-    }
+//    val dataList: ArrayList<DetailPosterData> by lazy {
+//        ArrayList<DetailPosterData>()
+//    }
     val networkService: NetworkService by lazy {
         ApplicationController.instance.networkService
     }
@@ -51,14 +50,14 @@ class HomeFragment : Fragment(), CardStackListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         homeFragmentView = inflater!!.inflate(R.layout.fragment_home, container, false)
-        getPosterListResponse()
+//        getPosterListResponse()
 //        setupNavigation()
         return homeFragmentView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-//        getPosterListResponse()
+        getPosterListResponse()
         setupCardStackView()//CardStackAdapter가 처음 쓰이는 부분
         setupButton()
     }
@@ -361,25 +360,46 @@ class HomeFragment : Fragment(), CardStackListener {
 */
 
     private fun getPosterListResponse() {
-//        val jsonObject: JSONObject = JSONObject()
-//        val gsonObject : JSONObject= JsonParser().parse(jsonObject.toString()) as JSONObject
         Log.e("1111111111111111", "1111111111111111111111")
         //바로 아래 라인에서 터진다
         val postPosterListResponse: Call<PostPosterListResponse> =
-            networkService.postPosterResponse("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJEb0lUU09QVCIsInVzZXJfaWR4IjoxfQ.5lCvAqnzYP4-2pFx1KTgLVOxYzBQ6ygZvkx5jKCFM08")//,gsonObject)
+        networkService.postPosterResponse("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJEb0lUU09QVCIsInVzZXJfaWR4IjoxfQ.5lCvAqnzYP4-2pFx1KTgLVOxYzBQ6ygZvkx5jKCFM08")
+        //    networkService.postPosterResponse(SharedPreferenceController.getAuthorization(this.context!!))
+        Log.e("postPosterListResponse",postPosterListResponse.toString())
         Log.e("2222222222222","2222222222222")
         postPosterListResponse.enqueue(object : Callback<PostPosterListResponse> {
             override fun onFailure(call: Call<PostPosterListResponse>, t: Throwable) {
-                Log.e("iiiiiiiiiiiiiiiiiiiiPoster call fail", t.toString())
+                Log.e("333333Poster call fail", t.toString())
             }
             override fun onResponse(
                 call: Call<PostPosterListResponse>,
                 response: Response<PostPosterListResponse>
             ) {
-                Log.e("cutedohee" ,"cute jinee")
+                Log.e("3333333" ,"33333333")
                 if (response.isSuccessful) {
                     Log.e("pleaseeeeeeeeeeeee", "can you come to here")
                     inputPosterData =response.body()!!.data
+//                    for (i in 0..9){
+//                        Log.e("pleaseeeeeeeeeeeee", response.body()!!.data.posters[i].posterIdx.toString())
+//                        inputPosterData!!.posters[i].posterIdx = response.body()!!.data.posters[i].posterIdx
+//                        inputPosterData!!.posters[i].categoryIdx = response.body()!!.data.posters[i].categoryIdx
+//                        inputPosterData!!.posters[i].photoUrl = response.body()!!.data.posters[i].photoUrl
+//                        inputPosterData!!.posters[i].posterName = response.body()!!.data.posters[i].posterName
+//                        inputPosterData!!.posters[i].posterRegDate = response.body()!!.data.posters[i].posterRegDate
+//                        inputPosterData!!.posters[i].posterStartDate = response.body()!!.data.posters[i].posterStartDate
+//                        inputPosterData!!.posters[i].posterEndDate = response.body()!!.data.posters[i].posterEndDate
+//                        inputPosterData!!.posters[i].posterWebsite = response.body()!!.data.posters[i].posterWebsite
+//                        inputPosterData!!.posters[i].isSeek = response.body()!!.data.posters[i].isSeek
+//                        inputPosterData!!.posters[i].outline = response.body()!!.data.posters[i].outline
+//                        inputPosterData!!.posters[i].target = response.body()!!.data.posters[i].target
+//                        inputPosterData!!.posters[i].period = response.body()!!.data.posters[i].period
+//                        inputPosterData!!.posters[i].benefit = response.body()!!.data.posters[i].benefit
+//                        inputPosterData!!.posters[i].announceDate1 = response.body()!!.data.posters[i].announceDate1
+//                        inputPosterData!!.posters[i].announceDate2 = response.body()!!.data.posters[i].announceDate2
+//                        inputPosterData!!.posters[i].finalAnnounceDate = response.body()!!.data.posters[i].finalAnnounceDate
+//                        inputPosterData!!.posters[i].interviewDate = response.body()!!.data.posters[i].interviewDate
+//                        inputPosterData!!.posters[i].documentDate = response.body()!!.data.posters[i].documentDate
+//                    }
                 }
             }
         })
@@ -389,243 +409,244 @@ class HomeFragment : Fragment(), CardStackListener {
     private fun createPosters(): ArrayList<DetailPosterData> {
         val posters = ArrayList<DetailPosterData>()
 //        Log.e(inputPosterData!!.posters[0].photoUrl, inputPosterData!!.posters[0].photoUrl.toString())
+//        Log.e("posterIdx",inputPosterData!!.posters[0].posterIdx.toString())
         Log.e("imageeeee", "eeeeeeeeeeeee")
         //1번 CARD
         posters.add(
             DetailPosterData(
-                inputPosterData!!.posters[0].posterIdx,
-                inputPosterData!!.posters[0].categoryIdx,
-                inputPosterData!!.posters[0].photoUrl,
-                inputPosterData!!.posters[0].posterName,
-                inputPosterData!!.posters[0].posterRegDate,
-                inputPosterData!!.posters[0].posterStartDate,
-                inputPosterData!!.posters[0].posterEndDate,
-                inputPosterData!!.posters[0].posterWebsite,
-                inputPosterData!!.posters[0].isSeek,
-                inputPosterData!!.posters[0].outline,
-                inputPosterData!!.posters[0].target,
-                inputPosterData!!.posters[0].period,
-                inputPosterData!!.posters[0].benefit,
-                inputPosterData!!.posters[0].documentDate,
-                inputPosterData!!.posters[0].announceDate1,
-                inputPosterData!!.posters[0].announceDate2,
-                inputPosterData!!.posters[0].finalAnnounceDate,
-                inputPosterData!!.posters[0].interviewDate
+                posterIdx = inputPosterData!!.posters[0].posterIdx,
+                categoryIdx = inputPosterData!!.posters[0].categoryIdx,
+                photoUrl = inputPosterData!!.posters[0].photoUrl,
+                posterName = inputPosterData!!.posters[0].posterName,
+                posterRegDate = inputPosterData!!.posters[0].posterRegDate,
+                posterStartDate = inputPosterData!!.posters[0].posterStartDate,
+                posterEndDate = inputPosterData!!.posters[0].posterEndDate,
+                posterWebsite = inputPosterData!!.posters[0].posterWebsite,
+                isSeek = inputPosterData!!.posters[0].isSeek,
+                outline = inputPosterData!!.posters[0].outline,
+                target = inputPosterData!!.posters[0].target,
+                period = inputPosterData!!.posters[0].period,
+                benefit = inputPosterData!!.posters[0].benefit,
+                announceDate1 = inputPosterData!!.posters[0].announceDate1,
+                announceDate2 = inputPosterData!!.posters[0].announceDate2,
+                finalAnnounceDate = inputPosterData!!.posters[0].finalAnnounceDate,
+                interviewDate = inputPosterData!!.posters[0].interviewDate,
+                documentDate = inputPosterData!!.posters[0].documentDate
             )
         )
         //2번 CARD
         posters.add(
             DetailPosterData(
-                inputPosterData!!.posters[1].posterIdx,
-                inputPosterData!!.posters[1].categoryIdx,
-                inputPosterData!!.posters[1].photoUrl,
-                inputPosterData!!.posters[1].posterName,
-                inputPosterData!!.posters[1].posterRegDate,
-                inputPosterData!!.posters[1].posterStartDate,
-                inputPosterData!!.posters[1].posterEndDate,
-                inputPosterData!!.posters[1].posterWebsite,
-                inputPosterData!!.posters[1].isSeek,
-                inputPosterData!!.posters[1].outline,
-                inputPosterData!!.posters[1].target,
-                inputPosterData!!.posters[1].period,
-                inputPosterData!!.posters[1].benefit,
-                inputPosterData!!.posters[1].documentDate,
-                inputPosterData!!.posters[1].announceDate1,
-                inputPosterData!!.posters[1].announceDate2,
-                inputPosterData!!.posters[1].finalAnnounceDate,
-                inputPosterData!!.posters[1].interviewDate
+                posterIdx = inputPosterData!!.posters[1].posterIdx,
+                categoryIdx = inputPosterData!!.posters[1].categoryIdx,
+                photoUrl = inputPosterData!!.posters[1].photoUrl,
+                posterName = inputPosterData!!.posters[1].posterName,
+                posterRegDate = inputPosterData!!.posters[1].posterRegDate,
+                posterStartDate = inputPosterData!!.posters[1].posterStartDate,
+                posterEndDate = inputPosterData!!.posters[1].posterEndDate,
+                posterWebsite = inputPosterData!!.posters[1].posterWebsite,
+                isSeek = inputPosterData!!.posters[1].isSeek,
+                outline = inputPosterData!!.posters[1].outline,
+                target = inputPosterData!!.posters[1].target,
+                period = inputPosterData!!.posters[1].period,
+                benefit = inputPosterData!!.posters[1].benefit,
+                announceDate1 = inputPosterData!!.posters[1].announceDate1,
+                announceDate2 = inputPosterData!!.posters[1].announceDate2,
+                finalAnnounceDate = inputPosterData!!.posters[1].finalAnnounceDate,
+                interviewDate = inputPosterData!!.posters[1].interviewDate,
+                documentDate = inputPosterData!!.posters[1].documentDate
             )
         )
 
         //3번 CARD
         posters.add(
             DetailPosterData(
-                inputPosterData!!.posters[2].posterIdx,
-                inputPosterData!!.posters[2].categoryIdx,
-                inputPosterData!!.posters[2].photoUrl,
-                inputPosterData!!.posters[2].posterName,
-                inputPosterData!!.posters[2].posterRegDate,
-                inputPosterData!!.posters[2].posterStartDate,
-                inputPosterData!!.posters[2].posterEndDate,
-                inputPosterData!!.posters[2].posterWebsite,
-                inputPosterData!!.posters[2].isSeek,
-                inputPosterData!!.posters[2].outline,
-                inputPosterData!!.posters[2].target,
-                inputPosterData!!.posters[2].period,
-                inputPosterData!!.posters[2].benefit,
-                inputPosterData!!.posters[2].documentDate,
-                inputPosterData!!.posters[2].announceDate1,
-                inputPosterData!!.posters[2].announceDate2,
-                inputPosterData!!.posters[2].finalAnnounceDate,
-                inputPosterData!!.posters[2].interviewDate
+                posterIdx = inputPosterData!!.posters[2].posterIdx,
+                categoryIdx = inputPosterData!!.posters[2].categoryIdx,
+                photoUrl = inputPosterData!!.posters[2].photoUrl,
+                posterName = inputPosterData!!.posters[2].posterName,
+                posterRegDate = inputPosterData!!.posters[2].posterRegDate,
+                posterStartDate = inputPosterData!!.posters[2].posterStartDate,
+                posterEndDate = inputPosterData!!.posters[2].posterEndDate,
+                posterWebsite = inputPosterData!!.posters[2].posterWebsite,
+                isSeek = inputPosterData!!.posters[2].isSeek,
+                outline = inputPosterData!!.posters[2].outline,
+                target = inputPosterData!!.posters[2].target,
+                period = inputPosterData!!.posters[2].period,
+                benefit = inputPosterData!!.posters[2].benefit,
+                announceDate1 = inputPosterData!!.posters[2].announceDate1,
+                announceDate2 = inputPosterData!!.posters[2].announceDate2,
+                finalAnnounceDate = inputPosterData!!.posters[2].finalAnnounceDate,
+                interviewDate = inputPosterData!!.posters[2].interviewDate,
+                documentDate = inputPosterData!!.posters[2].documentDate
             )
         )
 
         //4번 CARD
         posters.add(
             DetailPosterData(
-                inputPosterData!!.posters[3].posterIdx,
-                inputPosterData!!.posters[3].categoryIdx,
-                inputPosterData!!.posters[3].photoUrl,
-                inputPosterData!!.posters[3].posterName,
-                inputPosterData!!.posters[3].posterRegDate,
-                inputPosterData!!.posters[3].posterStartDate,
-                inputPosterData!!.posters[3].posterEndDate,
-                inputPosterData!!.posters[3].posterWebsite,
-                inputPosterData!!.posters[3].isSeek,
-                inputPosterData!!.posters[3].outline,
-                inputPosterData!!.posters[3].target,
-                inputPosterData!!.posters[3].period,
-                inputPosterData!!.posters[3].benefit,
-                inputPosterData!!.posters[3].documentDate,
-                inputPosterData!!.posters[3].announceDate1,
-                inputPosterData!!.posters[3].announceDate2,
-                inputPosterData!!.posters[3].finalAnnounceDate,
-                inputPosterData!!.posters[3].interviewDate
+                posterIdx = inputPosterData!!.posters[3].posterIdx,
+                categoryIdx = inputPosterData!!.posters[3].categoryIdx,
+                photoUrl = inputPosterData!!.posters[3].photoUrl,
+                posterName = inputPosterData!!.posters[3].posterName,
+                posterRegDate = inputPosterData!!.posters[3].posterRegDate,
+                posterStartDate = inputPosterData!!.posters[3].posterStartDate,
+                posterEndDate = inputPosterData!!.posters[3].posterEndDate,
+                posterWebsite = inputPosterData!!.posters[3].posterWebsite,
+                isSeek = inputPosterData!!.posters[3].isSeek,
+                outline = inputPosterData!!.posters[3].outline,
+                target = inputPosterData!!.posters[3].target,
+                period = inputPosterData!!.posters[3].period,
+                benefit = inputPosterData!!.posters[3].benefit,
+                announceDate1 = inputPosterData!!.posters[3].announceDate1,
+                announceDate2 = inputPosterData!!.posters[3].announceDate2,
+                finalAnnounceDate = inputPosterData!!.posters[3].finalAnnounceDate,
+                interviewDate = inputPosterData!!.posters[3].interviewDate,
+                documentDate = inputPosterData!!.posters[3].documentDate
             )
         )
 
         //5번 CARD
         posters.add(
             DetailPosterData(
-                inputPosterData!!.posters[4].posterIdx,
-                inputPosterData!!.posters[4].categoryIdx,
-                inputPosterData!!.posters[4].photoUrl,
-                inputPosterData!!.posters[4].posterName,
-                inputPosterData!!.posters[4].posterRegDate,
-                inputPosterData!!.posters[4].posterStartDate,
-                inputPosterData!!.posters[4].posterEndDate,
-                inputPosterData!!.posters[4].posterWebsite,
-                inputPosterData!!.posters[4].isSeek,
-                inputPosterData!!.posters[4].outline,
-                inputPosterData!!.posters[4].target,
-                inputPosterData!!.posters[4].period,
-                inputPosterData!!.posters[4].benefit,
-                inputPosterData!!.posters[4].documentDate,
-                inputPosterData!!.posters[4].announceDate1,
-                inputPosterData!!.posters[4].announceDate2,
-                inputPosterData!!.posters[4].finalAnnounceDate,
-                inputPosterData!!.posters[4].interviewDate
+                posterIdx = inputPosterData!!.posters[4].posterIdx,
+                categoryIdx = inputPosterData!!.posters[4].categoryIdx,
+                photoUrl = inputPosterData!!.posters[4].photoUrl,
+                posterName = inputPosterData!!.posters[4].posterName,
+                posterRegDate = inputPosterData!!.posters[4].posterRegDate,
+                posterStartDate = inputPosterData!!.posters[4].posterStartDate,
+                posterEndDate = inputPosterData!!.posters[4].posterEndDate,
+                posterWebsite = inputPosterData!!.posters[4].posterWebsite,
+                isSeek = inputPosterData!!.posters[4].isSeek,
+                outline = inputPosterData!!.posters[4].outline,
+                target = inputPosterData!!.posters[4].target,
+                period = inputPosterData!!.posters[4].period,
+                benefit = inputPosterData!!.posters[4].benefit,
+                announceDate1 = inputPosterData!!.posters[4].announceDate1,
+                announceDate2 = inputPosterData!!.posters[4].announceDate2,
+                finalAnnounceDate = inputPosterData!!.posters[4].finalAnnounceDate,
+                interviewDate = inputPosterData!!.posters[4].interviewDate,
+                documentDate = inputPosterData!!.posters[4].documentDate
             )
         )
 
         //6번 CARD
         posters.add(
             DetailPosterData(
-                inputPosterData!!.posters[5].posterIdx,
-                inputPosterData!!.posters[5].categoryIdx,
-                inputPosterData!!.posters[5].photoUrl,
-                inputPosterData!!.posters[5].posterName,
-                inputPosterData!!.posters[5].posterRegDate,
-                inputPosterData!!.posters[5].posterStartDate,
-                inputPosterData!!.posters[5].posterEndDate,
-                inputPosterData!!.posters[5].posterWebsite,
-                inputPosterData!!.posters[5].isSeek,
-                inputPosterData!!.posters[5].outline,
-                inputPosterData!!.posters[5].target,
-                inputPosterData!!.posters[5].period,
-                inputPosterData!!.posters[5].benefit,
-                inputPosterData!!.posters[5].documentDate,
-                inputPosterData!!.posters[5].announceDate1,
-                inputPosterData!!.posters[5].announceDate2,
-                inputPosterData!!.posters[5].finalAnnounceDate,
-                inputPosterData!!.posters[5].interviewDate
+                posterIdx = inputPosterData!!.posters[5].posterIdx,
+                categoryIdx = inputPosterData!!.posters[5].categoryIdx,
+                photoUrl = inputPosterData!!.posters[5].photoUrl,
+                posterName = inputPosterData!!.posters[5].posterName,
+                posterRegDate = inputPosterData!!.posters[5].posterRegDate,
+                posterStartDate = inputPosterData!!.posters[5].posterStartDate,
+                posterEndDate = inputPosterData!!.posters[5].posterEndDate,
+                posterWebsite = inputPosterData!!.posters[5].posterWebsite,
+                isSeek = inputPosterData!!.posters[5].isSeek,
+                outline = inputPosterData!!.posters[5].outline,
+                target = inputPosterData!!.posters[5].target,
+                period = inputPosterData!!.posters[5].period,
+                benefit = inputPosterData!!.posters[5].benefit,
+                announceDate1 = inputPosterData!!.posters[5].announceDate1,
+                announceDate2 = inputPosterData!!.posters[5].announceDate2,
+                finalAnnounceDate = inputPosterData!!.posters[5].finalAnnounceDate,
+                interviewDate = inputPosterData!!.posters[5].interviewDate,
+                documentDate = inputPosterData!!.posters[5].documentDate
             )
         )
 
         //7번 CARD
         posters.add(
             DetailPosterData(
-                inputPosterData!!.posters[6].posterIdx,
-                inputPosterData!!.posters[6].categoryIdx,
-                inputPosterData!!.posters[6].photoUrl,
-                inputPosterData!!.posters[6].posterName,
-                inputPosterData!!.posters[6].posterRegDate,
-                inputPosterData!!.posters[6].posterStartDate,
-                inputPosterData!!.posters[6].posterEndDate,
-                inputPosterData!!.posters[6].posterWebsite,
-                inputPosterData!!.posters[6].isSeek,
-                inputPosterData!!.posters[6].outline,
-                inputPosterData!!.posters[6].target,
-                inputPosterData!!.posters[6].period,
-                inputPosterData!!.posters[6].benefit,
-                inputPosterData!!.posters[6].documentDate,
-                inputPosterData!!.posters[6].announceDate1,
-                inputPosterData!!.posters[6].announceDate2,
-                inputPosterData!!.posters[6].finalAnnounceDate,
-                inputPosterData!!.posters[6].interviewDate
+                posterIdx = inputPosterData!!.posters[6].posterIdx,
+                categoryIdx = inputPosterData!!.posters[6].categoryIdx,
+                photoUrl = inputPosterData!!.posters[6].photoUrl,
+                posterName = inputPosterData!!.posters[6].posterName,
+                posterRegDate = inputPosterData!!.posters[6].posterRegDate,
+                posterStartDate = inputPosterData!!.posters[6].posterStartDate,
+                posterEndDate = inputPosterData!!.posters[6].posterEndDate,
+                posterWebsite = inputPosterData!!.posters[6].posterWebsite,
+                isSeek = inputPosterData!!.posters[6].isSeek,
+                outline = inputPosterData!!.posters[6].outline,
+                target = inputPosterData!!.posters[6].target,
+                period = inputPosterData!!.posters[6].period,
+                benefit = inputPosterData!!.posters[6].benefit,
+                announceDate1 = inputPosterData!!.posters[6].announceDate1,
+                announceDate2 = inputPosterData!!.posters[6].announceDate2,
+                finalAnnounceDate = inputPosterData!!.posters[6].finalAnnounceDate,
+                interviewDate = inputPosterData!!.posters[6].interviewDate,
+                documentDate = inputPosterData!!.posters[6].documentDate
             )
         )
 
         //8번 CARD
         posters.add(
             DetailPosterData(
-                inputPosterData!!.posters[7].posterIdx,
-                inputPosterData!!.posters[7].categoryIdx,
-                inputPosterData!!.posters[7].photoUrl,
-                inputPosterData!!.posters[7].posterName,
-                inputPosterData!!.posters[7].posterRegDate,
-                inputPosterData!!.posters[7].posterStartDate,
-                inputPosterData!!.posters[7].posterEndDate,
-                inputPosterData!!.posters[7].posterWebsite,
-                inputPosterData!!.posters[7].isSeek,
-                inputPosterData!!.posters[7].outline,
-                inputPosterData!!.posters[7].target,
-                inputPosterData!!.posters[7].period,
-                inputPosterData!!.posters[7].benefit,
-                inputPosterData!!.posters[7].documentDate,
-                inputPosterData!!.posters[7].announceDate1,
-                inputPosterData!!.posters[7].announceDate2,
-                inputPosterData!!.posters[7].finalAnnounceDate,
-                inputPosterData!!.posters[7].interviewDate
+                posterIdx = inputPosterData!!.posters[7].posterIdx,
+                categoryIdx = inputPosterData!!.posters[7].categoryIdx,
+                photoUrl = inputPosterData!!.posters[7].photoUrl,
+                posterName = inputPosterData!!.posters[7].posterName,
+                posterRegDate = inputPosterData!!.posters[7].posterRegDate,
+                posterStartDate = inputPosterData!!.posters[7].posterStartDate,
+                posterEndDate = inputPosterData!!.posters[7].posterEndDate,
+                posterWebsite = inputPosterData!!.posters[7].posterWebsite,
+                isSeek = inputPosterData!!.posters[7].isSeek,
+                outline = inputPosterData!!.posters[7].outline,
+                target = inputPosterData!!.posters[7].target,
+                period = inputPosterData!!.posters[7].period,
+                benefit = inputPosterData!!.posters[7].benefit,
+                announceDate1 = inputPosterData!!.posters[7].announceDate1,
+                announceDate2 = inputPosterData!!.posters[7].announceDate2,
+                finalAnnounceDate = inputPosterData!!.posters[7].finalAnnounceDate,
+                interviewDate = inputPosterData!!.posters[7].interviewDate,
+                documentDate = inputPosterData!!.posters[7].documentDate
             )
         )
 
         //9번 CARD
         posters.add(
             DetailPosterData(
-                inputPosterData!!.posters[8].posterIdx,
-                inputPosterData!!.posters[8].categoryIdx,
-                inputPosterData!!.posters[8].photoUrl,
-                inputPosterData!!.posters[8].posterName,
-                inputPosterData!!.posters[8].posterRegDate,
-                inputPosterData!!.posters[8].posterStartDate,
-                inputPosterData!!.posters[8].posterEndDate,
-                inputPosterData!!.posters[8].posterWebsite,
-                inputPosterData!!.posters[8].isSeek,
-                inputPosterData!!.posters[8].outline,
-                inputPosterData!!.posters[8].target,
-                inputPosterData!!.posters[8].period,
-                inputPosterData!!.posters[8].benefit,
-                inputPosterData!!.posters[8].documentDate,
-                inputPosterData!!.posters[8].announceDate1,
-                inputPosterData!!.posters[8].announceDate2,
-                inputPosterData!!.posters[8].finalAnnounceDate,
-                inputPosterData!!.posters[8].interviewDate
+                posterIdx = inputPosterData!!.posters[8].posterIdx,
+                categoryIdx = inputPosterData!!.posters[8].categoryIdx,
+                photoUrl = inputPosterData!!.posters[8].photoUrl,
+                posterName = inputPosterData!!.posters[8].posterName,
+                posterRegDate = inputPosterData!!.posters[8].posterRegDate,
+                posterStartDate = inputPosterData!!.posters[8].posterStartDate,
+                posterEndDate = inputPosterData!!.posters[8].posterEndDate,
+                posterWebsite = inputPosterData!!.posters[8].posterWebsite,
+                isSeek = inputPosterData!!.posters[8].isSeek,
+                outline = inputPosterData!!.posters[8].outline,
+                target = inputPosterData!!.posters[8].target,
+                period = inputPosterData!!.posters[8].period,
+                benefit = inputPosterData!!.posters[8].benefit,
+                announceDate1 = inputPosterData!!.posters[8].announceDate1,
+                announceDate2 = inputPosterData!!.posters[8].announceDate2,
+                finalAnnounceDate = inputPosterData!!.posters[8].finalAnnounceDate,
+                interviewDate = inputPosterData!!.posters[8].interviewDate,
+                documentDate = inputPosterData!!.posters[8].documentDate
             )
         )
 
         //10번 CARD
         posters.add(
             DetailPosterData(
-                inputPosterData!!.posters[9].posterIdx,
-                inputPosterData!!.posters[9].categoryIdx,
-                inputPosterData!!.posters[9].photoUrl,
-                inputPosterData!!.posters[9].posterName,
-                inputPosterData!!.posters[9].posterRegDate,
-                inputPosterData!!.posters[9].posterStartDate,
-                inputPosterData!!.posters[9].posterEndDate,
-                inputPosterData!!.posters[9].posterWebsite,
-                inputPosterData!!.posters[9].isSeek,
-                inputPosterData!!.posters[9].outline,
-                inputPosterData!!.posters[9].target,
-                inputPosterData!!.posters[9].period,
-                inputPosterData!!.posters[9].benefit,
-                inputPosterData!!.posters[9].documentDate,
-                inputPosterData!!.posters[9].announceDate1,
-                inputPosterData!!.posters[9].announceDate2,
-                inputPosterData!!.posters[9].finalAnnounceDate,
-                inputPosterData!!.posters[9].interviewDate
+                posterIdx = inputPosterData!!.posters[9].posterIdx,
+                categoryIdx = inputPosterData!!.posters[9].categoryIdx,
+                photoUrl = inputPosterData!!.posters[9].photoUrl,
+                posterName = inputPosterData!!.posters[9].posterName,
+                posterRegDate = inputPosterData!!.posters[9].posterRegDate,
+                posterStartDate = inputPosterData!!.posters[9].posterStartDate,
+                posterEndDate = inputPosterData!!.posters[9].posterEndDate,
+                posterWebsite = inputPosterData!!.posters[9].posterWebsite,
+                isSeek = inputPosterData!!.posters[9].isSeek,
+                outline = inputPosterData!!.posters[9].outline,
+                target = inputPosterData!!.posters[9].target,
+                period = inputPosterData!!.posters[9].period,
+                benefit = inputPosterData!!.posters[9].benefit,
+                announceDate1 = inputPosterData!!.posters[9].announceDate1,
+                announceDate2 = inputPosterData!!.posters[9].announceDate2,
+                finalAnnounceDate = inputPosterData!!.posters[9].finalAnnounceDate,
+                interviewDate = inputPosterData!!.posters[9].interviewDate,
+                documentDate = inputPosterData!!.posters[9].documentDate
             )
         )
         return posters
