@@ -31,18 +31,13 @@ import kotlin.collections.ArrayList
 class HomeFragment : Fragment(), CardStackListener {
     private val drawerLayout by lazy { drawer_layout }
     private var cardStackView: CardStackView? = null
-    //    private var LeftButtonView: CardStackView?= null
+
     private val manager by lazy { CardStackLayoutManager(context, this) }
-    private val adapter by lazy { CardStackAdapter(createPosters()) }
-    //    private val lbadapter by lazy  {LeftButtonAdpater(createPosters())}
-//    private var manager: CardStackLayoutManager? = null
-//    private val adapter:CardStackAdapter = CardStackAdapter(createPosters())
+    //본래 선언
+    //    private val adapter by lazy { CardStackAdapter(createPosters()) }
+    lateinit var adapter : CardStackAdapter
     private var homeFragmentView: View? = null
 
-    //For Server Communication
-//    val dataList: ArrayList<DetailPosterData> by lazy {
-//        ArrayList<DetailPosterData>()
-//    }
     val networkService: NetworkService by lazy {
         ApplicationController.instance.networkService
     }
@@ -50,7 +45,7 @@ class HomeFragment : Fragment(), CardStackListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         homeFragmentView = inflater!!.inflate(R.layout.fragment_home, container, false)
-//        getPosterListResponse()
+
 //        setupNavigation()
         return homeFragmentView
     }
@@ -58,6 +53,9 @@ class HomeFragment : Fragment(), CardStackListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         getPosterListResponse()
+        Thread.sleep(1000)
+        //by lazy에서 lateinit으로 변경함에 따라 adapter 초기화하기 위함
+        adapter= CardStackAdapter(createPosters())
         setupCardStackView()//CardStackAdapter가 처음 쓰이는 부분
         setupButton()
     }
@@ -363,10 +361,11 @@ class HomeFragment : Fragment(), CardStackListener {
         Log.e("1111111111111111", "1111111111111111111111")
         //바로 아래 라인에서 터진다
         val postPosterListResponse: Call<PostPosterListResponse> =
-        networkService.postPosterResponse("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJEb0lUU09QVCIsInVzZXJfaWR4IjoxfQ.5lCvAqnzYP4-2pFx1KTgLVOxYzBQ6ygZvkx5jKCFM08")
-        //    networkService.postPosterResponse(SharedPreferenceController.getAuthorization(this.context!!))
-        Log.e("postPosterListResponse",postPosterListResponse.toString())
+            networkService.postPosterResponse("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJEb0lUU09QVCIsInVzZXJfaWR4IjoxfQ.5lCvAqnzYP4-2pFx1KTgLVOxYzBQ6ygZvkx5jKCFM08")
+        //networkService.postPosterResponse(SharedPreferenceController.getAuthorization(this.context!!))
+        //Log.e("authcheck",SharedPreferenceController.getAuthorization((this.context!!)))
         Log.e("2222222222222","2222222222222")
+        Thread.sleep(300)
         postPosterListResponse.enqueue(object : Callback<PostPosterListResponse> {
             override fun onFailure(call: Call<PostPosterListResponse>, t: Throwable) {
                 Log.e("333333Poster call fail", t.toString())
@@ -377,34 +376,17 @@ class HomeFragment : Fragment(), CardStackListener {
             ) {
                 Log.e("3333333" ,"33333333")
                 if (response.isSuccessful) {
-                    Log.e("pleaseeeeeeeeeeeee", "can you come to here")
-                    inputPosterData =response.body()!!.data
-//                    for (i in 0..9){
-//                        Log.e("pleaseeeeeeeeeeeee", response.body()!!.data.posters[i].posterIdx.toString())
-//                        inputPosterData!!.posters[i].posterIdx = response.body()!!.data.posters[i].posterIdx
-//                        inputPosterData!!.posters[i].categoryIdx = response.body()!!.data.posters[i].categoryIdx
-//                        inputPosterData!!.posters[i].photoUrl = response.body()!!.data.posters[i].photoUrl
-//                        inputPosterData!!.posters[i].posterName = response.body()!!.data.posters[i].posterName
-//                        inputPosterData!!.posters[i].posterRegDate = response.body()!!.data.posters[i].posterRegDate
-//                        inputPosterData!!.posters[i].posterStartDate = response.body()!!.data.posters[i].posterStartDate
-//                        inputPosterData!!.posters[i].posterEndDate = response.body()!!.data.posters[i].posterEndDate
-//                        inputPosterData!!.posters[i].posterWebsite = response.body()!!.data.posters[i].posterWebsite
-//                        inputPosterData!!.posters[i].isSeek = response.body()!!.data.posters[i].isSeek
-//                        inputPosterData!!.posters[i].outline = response.body()!!.data.posters[i].outline
-//                        inputPosterData!!.posters[i].target = response.body()!!.data.posters[i].target
-//                        inputPosterData!!.posters[i].period = response.body()!!.data.posters[i].period
-//                        inputPosterData!!.posters[i].benefit = response.body()!!.data.posters[i].benefit
-//                        inputPosterData!!.posters[i].announceDate1 = response.body()!!.data.posters[i].announceDate1
-//                        inputPosterData!!.posters[i].announceDate2 = response.body()!!.data.posters[i].announceDate2
-//                        inputPosterData!!.posters[i].finalAnnounceDate = response.body()!!.data.posters[i].finalAnnounceDate
-//                        inputPosterData!!.posters[i].interviewDate = response.body()!!.data.posters[i].interviewDate
-//                        inputPosterData!!.posters[i].documentDate = response.body()!!.data.posters[i].documentDate
-//                    }
+                    //?.의 오른쪽이 함수이면 null safe operator
+                    //?.의 오른쪽이 변수/상수이면 null이 될 수 있는 타입 표시
+                    if (response.body()?.data!=null) {
+                        Log.e("pleaseeeeeeeeeeeee", "can you come to here")
+                        inputPosterData = response.body()!!.data
+                        Thread.sleep(300)
+                    }
                 }
             }
         })
     }
-
 
     private fun createPosters(): ArrayList<DetailPosterData> {
         val posters = ArrayList<DetailPosterData>()
